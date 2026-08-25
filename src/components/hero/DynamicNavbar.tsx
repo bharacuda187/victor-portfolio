@@ -43,29 +43,61 @@ export default function DynamicNavbar({
       }}
       transition={{
         duration: 0.8,
+        ease: [0.16, 1, 0.3, 1],
       }}
       className="fixed top-8 left-1/2 z-50 -translate-x-1/2"
     >
       <motion.div
+        initial={false}
         animate={{
-          width: expanded ? 760 : 230,
+          width: expanded ? 720 : 300,
+          height: expanded ? 70 : 60,
         }}
         transition={{
           type: 'spring',
           stiffness: 220,
-          damping: 22,
+          damping: 24,
         }}
         onClick={toggleNavbar}
-        className="flex h-14 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/10 bg-white/10 px-5 shadow-xl backdrop-blur-xl"
+        className="group relative overflow-hidden rounded-2xl border border-white/10 bg-black/80 shadow-[0_15px_50px_rgba(0,0,0,0.65)] backdrop-blur-2xl"
       >
-        <AnimatePresence mode="popLayout">
-          {/* COLLAPSED */}
+        {/* =====================================================
+            ORANGE GLOWING EDGE
+        ===================================================== */}
+
+        <motion.div
+          animate={{
+            opacity: expanded ? 0.9 : [0.3, 0.8, 0.3],
+          }}
+          transition={{
+            duration: 2.5,
+            repeat: expanded ? 0 : Infinity,
+            ease: 'easeInOut',
+          }}
+          className="absolute top-0 left-1/2 h-[2px] w-1/2 -translate-x-1/2 bg-orange-500 shadow-[0_0_14px_rgba(249,115,22,0.9)]"
+        />
+
+        <motion.div
+          animate={{
+            opacity: expanded ? 0.5 : 0.2,
+          }}
+          transition={{
+            duration: 0.3,
+          }}
+          className="absolute bottom-0 left-1/2 h-px w-2/3 -translate-x-1/2 bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.7)]"
+        />
+
+        <AnimatePresence mode="wait">
+          {/* ===================================================
+              COLLAPSED
+          =================================================== */}
+
           {!expanded && (
             <motion.div
               key="collapsed"
               initial={{
                 opacity: 0,
-                scale: 0.8,
+                scale: 0.9,
               }}
               animate={{
                 opacity: 1,
@@ -73,56 +105,61 @@ export default function DynamicNavbar({
               }}
               exit={{
                 opacity: 0,
-                scale: 0.8,
+                scale: 0.9,
               }}
               transition={{
-                duration: 0.3,
+                duration: 0.25,
               }}
-              className="flex items-center gap-2 font-mono whitespace-nowrap"
+              className="flex h-full w-full cursor-pointer items-center justify-center gap-3 px-6 font-mono whitespace-nowrap"
             >
+              {/* STATUS LIGHT */}
+
               <motion.span
-                className="h-3 w-3 rounded-full bg-orange-500 shadow-[0_0_20px_rgba(249,115,22,0.9)]"
                 animate={{
-                  opacity: [1, 0.45, 1],
-                  scale: [1, 0.9, 1],
+                  opacity: [0.45, 1, 0.45],
+                  scale: [1, 1.15, 1],
                 }}
                 transition={{
                   duration: 2,
                   repeat: Infinity,
                   ease: 'easeInOut',
                 }}
+                className="h-2.5 w-2.5 rounded-full bg-orange-500 shadow-[0_0_14px_rgba(249,115,22,0.9)]"
               />
 
-              <span className="text-sm">VICTOR OS</span>
+              <span className="text-sm tracking-[0.2em] text-white">VICTOR OS</span>
 
-              <span className="text-gray-600">//</span>
+              <span className="text-gray-700">//</span>
 
-              <span className="text-blue-400">MENU</span>
+              <span className="text-xs tracking-[0.25em] text-orange-400">MAIN MENU</span>
 
               <motion.span
                 animate={{
-                  x: [0, 3, 0],
-                  opacity: [0.5, 1, 0.5],
+                  x: [0, 4, 0],
+                  opacity: [0.4, 1, 0.4],
                 }}
                 transition={{
                   duration: 1.5,
                   repeat: Infinity,
                   ease: 'easeInOut',
                 }}
-                className="ml-1 text-[10px] text-gray-500"
+                className="ml-1 text-sm text-gray-500"
               >
                 →
               </motion.span>
             </motion.div>
           )}
 
-          {/* EXPANDED */}
+          {/* ===================================================
+              EXPANDED
+          =================================================== */}
+
           {expanded && (
             <motion.div
               key="expanded"
               initial={{
                 opacity: 0,
-                scaleX: 0.7,
+                scaleX: 0.85,
               }}
               animate={{
                 opacity: 1,
@@ -130,23 +167,46 @@ export default function DynamicNavbar({
               }}
               exit={{
                 opacity: 0,
-                scaleX: 0.7,
+                scaleX: 0.85,
               }}
               transition={{
-                duration: 0.35,
+                duration: 0.3,
+                ease: [0.16, 1, 0.3, 1],
               }}
-              onClick={(event) => event.stopPropagation()}
-              className="flex items-center gap-4 font-mono text-sm"
+              className="flex h-full w-full items-center px-4 font-mono"
             >
-              <NavItem label="HOME" onClick={onHomeClick} />
+              {/* SYSTEM INDICATOR */}
 
-              <NavItem label="PROFILE" onClick={onProfileClick} />
+              <div className="mr-3 flex items-center gap-2 border-r border-white/10 pr-4">
+                <motion.span
+                  animate={{
+                    opacity: [0.5, 1, 0.5],
+                    boxShadow: [
+                      '0 0 7px rgba(249,115,22,0.4)',
+                      '0 0 15px rgba(249,115,22,0.9)',
+                      '0 0 7px rgba(249,115,22,0.4)',
+                    ],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                  className="h-2 w-2 rounded-full bg-orange-500"
+                />
 
-              <NavItem label="STACK" onClick={onStackClick} />
+                <span className="text-[8px] tracking-[0.2em] text-gray-600">MAIN</span>
+              </div>
 
-              <NavItem label="PROJECTS" onClick={onProjectsClick} />
+              {/* NAVIGATION */}
 
-              <NavItem label="CONTACT" onClick={onContactClick} />
+              <div className="flex flex-1 items-center justify-center gap-2">
+                <NavItem label="HOME" onClick={onHomeClick} />
+                <NavItem label="PROFILE" onClick={onProfileClick} />
+                <NavItem label="STACK" onClick={onStackClick} />
+                <NavItem label="PROJECTS" onClick={onProjectsClick} />
+                <NavItem label="CONTACT" onClick={onContactClick} />
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -159,13 +219,35 @@ function NavItem({ label, onClick }: { label: string; onClick?: () => void }) {
   return (
     <motion.button
       type="button"
-      onClick={onClick}
-      whileHover={{
-        scale: 1.08,
+      onClick={(event) => {
+        event.stopPropagation();
+        onClick?.();
       }}
-      className="rounded-full px-3 py-1 text-xs text-gray-300 transition hover:bg-white/10"
+      whileHover={{
+        y: -1,
+        scale: 1.05,
+      }}
+      whileTap={{
+        scale: 0.95,
+      }}
+      className="relative rounded-lg px-4 py-2 text-[10px] tracking-[0.18em] text-gray-400 transition-colors duration-300 hover:bg-orange-500/5 hover:text-orange-400"
     >
       {label}
+
+      <motion.span
+        initial={{
+          scaleX: 0,
+          opacity: 0,
+        }}
+        whileHover={{
+          scaleX: 1,
+          opacity: 1,
+        }}
+        transition={{
+          duration: 0.2,
+        }}
+        className="absolute right-2 bottom-1 left-2 h-px origin-center bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.8)]"
+      />
     </motion.button>
   );
 }
