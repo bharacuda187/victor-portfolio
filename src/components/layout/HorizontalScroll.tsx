@@ -15,11 +15,13 @@ export default function HorizontalScroll({ children }: HorizontalScrollProps) {
     if (!container) return;
 
     const handleWheel = (event: WheelEvent) => {
+      // Mobile uses normal vertical touch scrolling.
+      if (window.innerWidth < 768) return;
+
       const target = event.target as HTMLElement;
 
-      const verticalScrollContainer = target.closest('[data-vertical-scroll]');
-
-      if (verticalScrollContainer) {
+      // Pages marked as vertical-scroll own their wheel movement.
+      if (target.closest('[data-vertical-scroll]')) {
         return;
       }
 
@@ -37,10 +39,7 @@ export default function HorizontalScroll({ children }: HorizontalScrollProps) {
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="flex h-screen w-screen overflow-x-auto overflow-y-hidden scroll-smooth"
-    >
+    <div ref={containerRef} className="flex h-screen w-screen overflow-x-auto overflow-y-hidden">
       {children}
     </div>
   );

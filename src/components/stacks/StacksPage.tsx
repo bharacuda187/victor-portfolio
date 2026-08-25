@@ -58,207 +58,236 @@ const stackGroups = [
 
 export default function StacksPage() {
   return (
-    <section className="relative h-screen w-screen overflow-hidden bg-black text-white">
-      {/* Background grid */}
-      <div className="pointer-events-none absolute inset-0 opacity-[0.08]">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
+    <>
+      <style jsx>{`
+        .page-scroll {
+          scrollbar-width: auto;
+          scrollbar-color: rgba(249, 115, 22, 0.7) rgba(255, 255, 255, 0.03);
+        }
+
+        .page-scroll::-webkit-scrollbar {
+          width: 8px;
+        }
+
+        .page-scroll::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.03);
+        }
+
+        .page-scroll::-webkit-scrollbar-thumb {
+          background: rgba(249, 115, 22, 0.7);
+          border-radius: 999px;
+        }
+
+        .page-scroll::-webkit-scrollbar-thumb:hover {
+          background: rgba(249, 115, 22, 0.95);
+        }
+      `}</style>
+      <section
+        data-vertical-scroll
+        className="page-scroll relative h-screen w-screen shrink-0 overflow-x-hidden overflow-y-scroll bg-black text-white"
+      >
+        {/* Background grid */}
+        <div className="pointer-events-none fixed inset-0 opacity-[0.08]">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `
               linear-gradient(rgba(96,165,250,0.35) 1px, transparent 1px),
               linear-gradient(90deg, rgba(96,165,250,0.35) 1px, transparent 1px)
             `,
-            backgroundSize: '50px 50px',
-          }}
-        />
-      </div>
+              backgroundSize: '50px 50px',
+            }}
+          />
+        </div>
 
-      {/* Ambient glow */}
-      <div className="pointer-events-none absolute top-1/2 left-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500/[0.04] blur-[120px]" />
+        {/* Ambient glow */}
+        <div className="pointer-events-none fixed top-1/2 left-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500/[0.04] blur-[120px]" />
 
-      {/* Main content */}
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col px-6 pt-24 pb-8 md:px-10">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20, filter: 'blur(8px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 0.7 }}
-          className="mb-8"
-        >
-          <div className="flex items-center gap-3 font-mono text-[10px] tracking-[0.3em] text-blue-400">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-400" />
-            SYS.ARCHIVE // TECHNOLOGY_STACK
-          </div>
+        {/* Content */}
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-32 pb-8 sm:px-6 md:px-10 md:pt-28">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: -20, filter: 'blur(8px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 0.7 }}
+            className="mb-8"
+          >
+            <div className="flex items-center gap-3 font-mono text-[10px] tracking-[0.3em] text-blue-400">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-400" />
+              SYS.ARCHIVE // TECHNOLOGY_STACK
+            </div>
 
-          <div className="mt-3 flex items-end justify-between">
-            <div>
-              <h1 className="font-mono text-4xl font-bold tracking-tight uppercase md:text-6xl">
+            <div className="mt-3">
+              <h1 className="font-mono text-3xl font-bold tracking-tight uppercase sm:text-4xl md:text-6xl">
                 SYSTEM
                 <span className="text-orange-500"> ARCHITECTURE</span>
               </h1>
 
-              <p className="mt-3 max-w-2xl font-mono text-xs tracking-[0.2em] text-gray-500 uppercase">
+              <p className="mt-3 max-w-2xl font-mono text-[10px] tracking-[0.15em] text-gray-500 uppercase sm:text-xs sm:tracking-[0.2em]">
                 Technologies, frameworks and infrastructure used to build digital systems.
               </p>
             </div>
 
-            <div className="hidden text-right font-mono md:block">
+            <div className="mt-4 hidden text-right font-mono md:block">
               <p className="text-[9px] tracking-[0.25em] text-gray-600">COMPONENT STATUS</p>
+
               <p className="mt-1 text-xs tracking-widest text-orange-500">
                 ALL SYSTEMS OPERATIONAL
               </p>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
 
-        {/* Stack grid */}
-        <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 overflow-y-auto pr-1 md:grid-cols-2">
-          {stackGroups.map((group, index) => {
-            const orange = group.color === 'orange';
+          {/* Stack grid */}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {stackGroups.map((group, index) => {
+              const orange = group.color === 'orange';
 
-            return (
-              <motion.div
-                key={group.id}
-                initial={{
-                  opacity: 0,
-                  y: 30,
-                  scale: 0.97,
-                  filter: 'blur(6px)',
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                  scale: 1,
-                  filter: 'blur(0px)',
-                }}
-                transition={{
-                  duration: 0.6,
-                  delay: 0.15 + index * 0.1,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                className="group relative overflow-hidden rounded-xl border border-white/10 bg-white/[0.025] p-5 backdrop-blur-sm transition-colors duration-300 hover:border-white/20"
-              >
-                {/* Corner accents */}
-                <div
-                  className={`absolute top-2 left-2 h-5 w-5 border-t border-l ${
-                    orange ? 'border-orange-500/70' : 'border-blue-400/70'
-                  }`}
-                />
-
-                <div
-                  className={`absolute top-2 right-2 h-5 w-5 border-t border-r ${
-                    orange ? 'border-orange-500/40' : 'border-blue-400/40'
-                  }`}
-                />
-
-                <div
-                  className={`absolute bottom-2 left-2 h-5 w-5 border-b border-l ${
-                    orange ? 'border-orange-500/40' : 'border-blue-400/40'
-                  }`}
-                />
-
-                <div
-                  className={`absolute right-2 bottom-2 h-5 w-5 border-r border-b ${
-                    orange ? 'border-orange-500/70' : 'border-blue-400/70'
-                  }`}
-                />
-
-                {/* Group header */}
-                <div className="mb-5 flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <span
-                      className={`font-mono text-2xl font-bold ${
-                        orange ? 'text-orange-500' : 'text-blue-400'
-                      }`}
-                    >
-                      {group.id}
-                    </span>
-
-                    <div>
-                      <h2 className="font-mono text-sm font-bold tracking-[0.2em]">
-                        {group.title}
-                      </h2>
-
-                      <p className="mt-1 font-mono text-[8px] tracking-[0.25em] text-gray-600">
-                        {group.code}
-                      </p>
-                    </div>
-                  </div>
-
-                  <span className="font-mono text-[8px] tracking-widest text-gray-600">
-                    {String(group.items.length).padStart(2, '0')} MODULES
-                  </span>
-                </div>
-
-                {/* Technology list */}
-                <div className="space-y-2">
-                  {group.items.map((item, itemIndex) => (
-                    <motion.div
-                      key={item.name}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{
-                        duration: 0.35,
-                        delay: 0.35 + index * 0.1 + itemIndex * 0.04,
-                      }}
-                      className="flex items-center justify-between border border-white/[0.06] bg-black/30 px-3 py-2.5"
-                    >
-                      <div className="flex items-center gap-3">
-                        <span
-                          className={`h-1.5 w-1.5 rounded-full ${
-                            orange ? 'bg-orange-500' : 'bg-blue-400'
-                          }`}
-                        />
-
-                        <span className="font-mono text-xs tracking-wider text-gray-300">
-                          {item.name}
-                        </span>
-                      </div>
-
-                      <span
-                        className={`font-mono text-[8px] tracking-[0.2em] ${
-                          item.status === 'CORE' ? 'text-orange-500/70' : 'text-blue-400/70'
-                        }`}
-                      >
-                        {item.status}
-                      </span>
-                    </motion.div>
-                  ))}
-                </div>
-
-                {/* Scan line */}
+              return (
                 <motion.div
+                  key={group.id}
+                  initial={{
+                    opacity: 0,
+                    y: 30,
+                    scale: 0.97,
+                    filter: 'blur(6px)',
+                  }}
                   animate={{
-                    y: ['0%', '100%'],
-                    opacity: [0, 0.5, 0],
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    filter: 'blur(0px)',
                   }}
                   transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    repeatDelay: 3,
-                    ease: 'linear',
+                    duration: 0.6,
+                    delay: 0.15 + index * 0.1,
+                    ease: [0.16, 1, 0.3, 1],
                   }}
-                  className={`pointer-events-none absolute left-0 h-px w-full bg-gradient-to-r from-transparent ${
-                    orange ? 'via-orange-500/40' : 'via-blue-400/30'
-                  } to-transparent`}
-                />
-              </motion.div>
-            );
-          })}
-        </div>
+                  className="group relative rounded-xl border border-white/10 bg-white/[0.025] p-4 backdrop-blur-sm transition-colors duration-300 hover:border-white/20 md:p-5"
+                >
+                  {/* Corner accents */}
+                  <div
+                    className={`absolute top-2 left-2 h-5 w-5 border-t border-l ${
+                      orange ? 'border-orange-500/70' : 'border-blue-400/70'
+                    }`}
+                  />
 
-        {/* Footer status */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-          className="mt-4 flex items-center justify-between border-t border-white/[0.06] pt-3 font-mono text-[8px] tracking-[0.2em] text-gray-600"
-        >
-          <span>ARCHITECTURE // ONLINE</span>
-          <span>STACK INTEGRITY 100%</span>
-          <span className="hidden md:block">SYS.ID // VATS-STACK</span>
-        </motion.div>
-      </div>
-    </section>
+                  <div
+                    className={`absolute top-2 right-2 h-5 w-5 border-t border-r ${
+                      orange ? 'border-orange-500/40' : 'border-blue-400/40'
+                    }`}
+                  />
+
+                  <div
+                    className={`absolute bottom-2 left-2 h-5 w-5 border-b border-l ${
+                      orange ? 'border-orange-500/40' : 'border-blue-400/40'
+                    }`}
+                  />
+
+                  <div
+                    className={`absolute right-2 bottom-2 h-5 w-5 border-r border-b ${
+                      orange ? 'border-orange-500/70' : 'border-blue-400/70'
+                    }`}
+                  />
+
+                  {/* Header */}
+                  <div className="mb-5 flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <span
+                        className={`font-mono text-2xl font-bold ${
+                          orange ? 'text-orange-500' : 'text-blue-400'
+                        }`}
+                      >
+                        {group.id}
+                      </span>
+
+                      <div>
+                        <h2 className="font-mono text-sm font-bold tracking-[0.2em]">
+                          {group.title}
+                        </h2>
+
+                        <p className="mt-1 font-mono text-[8px] tracking-[0.25em] text-gray-600">
+                          {group.code}
+                        </p>
+                      </div>
+                    </div>
+
+                    <span className="font-mono text-[8px] tracking-widest text-gray-600">
+                      {String(group.items.length).padStart(2, '0')} MODULES
+                    </span>
+                  </div>
+
+                  {/* Technology list */}
+                  <div className="space-y-2">
+                    {group.items.map((item, itemIndex) => (
+                      <motion.div
+                        key={item.name}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{
+                          duration: 0.35,
+                          delay: 0.35 + index * 0.1 + itemIndex * 0.04,
+                        }}
+                        className="flex items-center justify-between border border-white/[0.06] bg-black/30 px-3 py-2.5"
+                      >
+                        <div className="flex min-w-0 items-center gap-3">
+                          <span
+                            className={`h-1.5 w-1.5 shrink-0 rounded-full ${
+                              orange ? 'bg-orange-500' : 'bg-blue-400'
+                            }`}
+                          />
+
+                          <span className="truncate font-mono text-xs tracking-wider text-gray-300">
+                            {item.name}
+                          </span>
+                        </div>
+
+                        <span
+                          className={`ml-3 shrink-0 font-mono text-[8px] tracking-[0.2em] ${
+                            item.status === 'CORE' ? 'text-orange-500/70' : 'text-blue-400/70'
+                          }`}
+                        >
+                          {item.status}
+                        </span>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {/* Scan line */}
+                  <motion.div
+                    animate={{
+                      y: ['0%', '100%'],
+                      opacity: [0, 0.5, 0],
+                    }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      repeatDelay: 3,
+                      ease: 'linear',
+                    }}
+                    className={`pointer-events-none absolute left-0 h-px w-full bg-gradient-to-r from-transparent ${
+                      orange ? 'via-orange-500/40' : 'via-blue-400/30'
+                    } to-transparent`}
+                  />
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Footer */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2 }}
+            className="mt-6 flex items-center justify-between border-t border-white/[0.06] pt-3 font-mono text-[8px] tracking-[0.2em] text-gray-600"
+          >
+            <span>ARCHITECTURE // ONLINE</span>
+
+            <span>STACK INTEGRITY 100%</span>
+
+            <span className="hidden md:block">SYS.ID // VATS-STACK</span>
+          </motion.div>
+        </div>
+      </section>
+    </>
   );
 }

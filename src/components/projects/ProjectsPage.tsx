@@ -66,7 +66,7 @@ export default function ProjectsPage({
       <div className="pointer-events-none absolute top-1/2 left-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500/[0.035] blur-[140px]" />
 
       {/* Main container */}
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col px-6 pt-24 pb-8 md:px-10">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col px-6 pt-32 pb-8 md:px-10 md:pt-32">
         {/* HEADER */}
         <motion.div
           initial={{

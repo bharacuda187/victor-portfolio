@@ -45,12 +45,12 @@ export default function DynamicNavbar({
         duration: 0.8,
         ease: [0.16, 1, 0.3, 1],
       }}
-      className="fixed top-8 left-1/2 z-50 -translate-x-1/2"
+      className="fixed top-3 left-1/2 z-50 w-auto -translate-x-1/2 sm:top-5 md:top-8"
     >
       <motion.div
         initial={false}
         animate={{
-          width: expanded ? 720 : 300,
+          width: expanded ? 'min(720px, calc(100vw - 20px))' : 'min(300px, calc(100vw - 32px))',
           height: expanded ? 70 : 60,
         }}
         transition={{
@@ -110,7 +110,7 @@ export default function DynamicNavbar({
               transition={{
                 duration: 0.25,
               }}
-              className="flex h-full w-full cursor-pointer items-center justify-center gap-3 px-6 font-mono whitespace-nowrap"
+              className="flex h-full w-full cursor-pointer items-center justify-center gap-2 px-4 font-mono whitespace-nowrap sm:gap-3 sm:px-6"
             >
               {/* STATUS LIGHT */}
 
@@ -124,14 +124,18 @@ export default function DynamicNavbar({
                   repeat: Infinity,
                   ease: 'easeInOut',
                 }}
-                className="h-2.5 w-2.5 rounded-full bg-orange-500 shadow-[0_0_14px_rgba(249,115,22,0.9)]"
+                className="h-2.5 w-2.5 shrink-0 rounded-full bg-orange-500 shadow-[0_0_14px_rgba(249,115,22,0.9)]"
               />
 
-              <span className="text-sm tracking-[0.2em] text-white">VICTOR OS</span>
+              <span className="text-[11px] tracking-[0.16em] text-white sm:text-sm sm:tracking-[0.2em]">
+                VICTOR OS
+              </span>
 
               <span className="text-gray-700">//</span>
 
-              <span className="text-xs tracking-[0.25em] text-orange-400">MAIN MENU</span>
+              <span className="text-[9px] tracking-[0.18em] text-orange-400 sm:text-xs sm:tracking-[0.25em]">
+                MAIN MENU
+              </span>
 
               <motion.span
                 animate={{
@@ -173,11 +177,11 @@ export default function DynamicNavbar({
                 duration: 0.3,
                 ease: [0.16, 1, 0.3, 1],
               }}
-              className="flex h-full w-full items-center px-4 font-mono"
+              className="flex h-full w-full items-center px-2 font-mono sm:px-4"
             >
               {/* SYSTEM INDICATOR */}
 
-              <div className="mr-3 flex items-center gap-2 border-r border-white/10 pr-4">
+              <div className="mr-1 hidden items-center gap-2 border-r border-white/10 pr-3 sm:mr-3 sm:flex sm:pr-4">
                 <motion.span
                   animate={{
                     opacity: [0.5, 1, 0.5],
@@ -200,7 +204,7 @@ export default function DynamicNavbar({
 
               {/* NAVIGATION */}
 
-              <div className="flex flex-1 items-center justify-center gap-2">
+              <div className="flex flex-1 items-center justify-center gap-0.5 sm:gap-2">
                 <NavItem label="HOME" onClick={onHomeClick} />
                 <NavItem label="PROFILE" onClick={onProfileClick} />
                 <NavItem label="STACK" onClick={onStackClick} />
@@ -230,7 +234,7 @@ function NavItem({ label, onClick }: { label: string; onClick?: () => void }) {
       whileTap={{
         scale: 0.95,
       }}
-      className="relative rounded-lg px-4 py-2 text-[10px] tracking-[0.18em] text-gray-400 transition-colors duration-300 hover:bg-orange-500/5 hover:text-orange-400"
+      className="relative rounded-lg px-2 py-2 text-[8px] tracking-[0.08em] text-gray-400 transition-colors duration-300 hover:bg-orange-500/5 hover:text-orange-400 sm:px-3 sm:text-[10px] sm:tracking-[0.18em] md:px-4"
     >
       {label}
 
@@ -246,7 +250,7 @@ function NavItem({ label, onClick }: { label: string; onClick?: () => void }) {
         transition={{
           duration: 0.2,
         }}
-        className="absolute right-2 bottom-1 left-2 h-px origin-center bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.8)]"
+        className="absolute right-1 bottom-1 left-1 h-px origin-center bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.8)] sm:right-2 sm:left-2"
       />
     </motion.button>
   );

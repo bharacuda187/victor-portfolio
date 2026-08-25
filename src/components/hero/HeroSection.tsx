@@ -8,8 +8,6 @@ import * as THREE from 'three';
 import { GLTF } from 'three-stdlib';
 
 import DesktopBackground from './DesktopBackground';
-import CoreHUD from './CoreHUD';
-import CoreGlobe3D from './CoreGlobe3D';
 import DesktopIcons from './DesktopIcons';
 import FloatingWidget from './FloatingWidget';
 import Typewriter from './Typewriter';
@@ -34,12 +32,7 @@ interface CyberOrbProps {
 function CyberOrb({ active }: CyberOrbProps) {
   const { nodes } = useGLTF('/media/robobit.glb') as unknown as GLTFResult;
 
-  // -------------------------------------------------------------
-  // CONFIGURATION & CONTROLS
-  // -------------------------------------------------------------
   const MODEL_CONFIG = {
-    // Transform controls [X, Y, Z]
-    // Pitch (X): Math.PI / 12 (~15deg tilt up), Math.PI / 6 (~30deg tilt up)
     rotation: [Math.PI / -2.5, 0, 0] as [number, number, number],
     position: [0, 0, 0] as [number, number, number],
     scale: 1.2,
@@ -47,15 +40,14 @@ function CyberOrb({ active }: CyberOrbProps) {
 
   const ORBIT_CONFIG = {
     autoRotate: true,
-    autoRotateSpeed: 1.2, // Positive = clockwise, Negative = counter-clockwise
-    rotateSpeed: 0.9, // User dragging sensitivity
-    dampingFactor: 0.08, // Inertia smooth delay
+    autoRotateSpeed: 1.2,
+    rotateSpeed: 0.9,
+    dampingFactor: 0.08,
     zoomSpeed: 0.6,
     minDistance: 2.5,
     maxDistance: 5,
   };
 
-  // Mesh Material Overrides
   const sphere0Props = {
     color: '#f97316',
     metalness: 0.8,
@@ -81,7 +73,7 @@ function CyberOrb({ active }: CyberOrbProps) {
       position={MODEL_CONFIG.position}
       dispose={null}
     >
-      {/* Mesh 0 - Target Material.001 */}
+      {/* Mesh 0 */}
       <mesh geometry={nodes.Sphere_0.geometry}>
         <meshStandardMaterial
           color={sphere0Props.color}
@@ -90,7 +82,7 @@ function CyberOrb({ active }: CyberOrbProps) {
         />
       </mesh>
 
-      {/* Mesh 1 - Target Material.002 */}
+      {/* Mesh 1 */}
       <mesh geometry={nodes.Sphere_1.geometry}>
         <meshStandardMaterial
           color={sphere1Props.color}
@@ -99,7 +91,7 @@ function CyberOrb({ active }: CyberOrbProps) {
         />
       </mesh>
 
-      {/* Mesh 2 - Target Material.003 */}
+      {/* Mesh 2 */}
       <mesh geometry={nodes.Sphere_2.geometry}>
         <meshStandardMaterial
           color={sphere2Props.color}
@@ -146,18 +138,21 @@ export default function HeroSection({
     >
       <DesktopBackground />
 
-      <CoreHUD active={coreActive} />
-
       <DesktopIcons onModalChange={setModalOpen} />
 
-      <CoreGlobe3D active={coreActive} modalOpen={modalOpen} profileActive={profileActive} />
+      {/* =========================================================
+          HERO CONTENT
+      ========================================================= */}
 
-      {/* HERO CONTENT */}
       <div className="relative z-10 flex h-full items-center justify-center px-6 md:px-12">
         <div className="grid w-full max-w-6xl grid-cols-1 items-center gap-12 md:grid-cols-2">
-          {/* LEFT SIDE: TEXT CONTENT */}
+          {/* =====================================================
+              LEFT SIDE: TEXT CONTENT
+          ===================================================== */}
+
           <div className="text-center font-mono md:text-left">
             {/* SYSTEM ONLINE */}
+
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -168,6 +163,7 @@ export default function HeroSection({
             </motion.p>
 
             {/* MAIN HEADING */}
+
             <motion.h1
               initial={{
                 opacity: 0,
@@ -208,67 +204,130 @@ export default function HeroSection({
             </motion.h1>
 
             {/* ROLE / SUBTITLE */}
+
             <motion.p
-              initial={{ opacity: 0, y: 25 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 1.9 }}
+              initial={{
+                opacity: 0,
+                y: 25,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 0.7,
+                delay: 1.9,
+              }}
               className="mt-6 text-xl font-semibold tracking-wider text-orange-500 uppercase"
             >
               FULL STACK & SYSTEMS ARCHITECTURE
             </motion.p>
 
             {/* TAGS */}
+
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 2.15 }}
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 0.7,
+                delay: 2.15,
+              }}
               className="mt-3 text-xs tracking-widest text-gray-400 md:text-sm"
             >
               WEB APPLICATIONS • GAME ENGINES • INFRASTRUCTURE
             </motion.p>
           </div>
 
-          {/* RIGHT SIDE: HUD GRAPHIC PLACEHOLDER */}
+          {/* =====================================================
+              RIGHT SIDE: CORE / ROBOT
+          ===================================================== */}
+
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
-            animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-            transition={{ duration: 0.9, delay: 1.4, ease: [0.16, 1, 0.3, 1] }}
+            initial={{
+              opacity: 0,
+              scale: 0.9,
+              filter: 'blur(10px)',
+            }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              filter: 'blur(0px)',
+            }}
+            transition={{
+              duration: 0.9,
+              delay: 1.4,
+              ease: [0.16, 1, 0.3, 1],
+            }}
             className="relative flex aspect-square w-full max-w-md items-center justify-center justify-self-center rounded-lg p-6 font-mono"
           >
-            {/* Animated Orbit / Reticle Ring */}
+            {/* =================================================
+                OUTER RETICLE
+            ================================================= */}
+
             <motion.div
               className="absolute h-48 w-48 rounded-full border border-dashed border-blue-400/60"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+              animate={{
+                rotate: 360,
+              }}
+              transition={{
+                duration: 20,
+                repeat: Infinity,
+                ease: 'linear',
+              }}
             />
+
             <motion.div
               className="absolute h-36 w-36 rounded-full border border-orange-500/40"
-              animate={{ rotate: -360 }}
-              transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
+              animate={{
+                rotate: -360,
+              }}
+              transition={{
+                duration: 15,
+                repeat: Infinity,
+                ease: 'linear',
+              }}
             />
 
-            {/* Placeholder Tag Text */}
+            {/* =================================================
+                CORE CONTAINER
+
+                Globe and robot now share EXACTLY the same
+                coordinate space.
+            ================================================= */}
+
             <div className="relative z-10 h-96 w-96">
-              <Canvas
-                frameloop={profileActive ? 'never' : 'always'}
-                camera={{
-                  position: [0, 0, 4],
-                  fov: 40,
-                }}
-                dpr={[1, 1.5]}
-                gl={{
-                  antialias: true,
-                  alpha: true,
-                }}
-              >
-                <ambientLight intensity={0.8} />
+              {/* =================================================
+                  ROBOT — FRONT LAYER
+              ================================================= */}
 
-                <directionalLight position={[3, 3, 3]} intensity={2} />
+              <div className="absolute inset-0 z-10">
+                <Canvas
+                  frameloop={profileActive ? 'never' : 'always'}
+                  camera={{
+                    position: [0, 0, 4],
+                    fov: 40,
+                  }}
+                  dpr={[1, 1.5]}
+                  gl={{
+                    antialias: true,
+                    alpha: true,
+                  }}
+                >
+                  <ambientLight intensity={0.8} />
 
-                <CyberOrb active={!profileActive} />
+                  <directionalLight position={[3, 3, 3]} intensity={2} />
 
-                <Environment preset="city" />
-              </Canvas>
+                  <CyberOrb active={!profileActive} />
+
+                  <Environment preset="city" />
+                </Canvas>
+              </div>
             </div>
           </motion.div>
         </div>

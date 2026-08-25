@@ -59,3 +59,17 @@ VICTOR OS — GLOBAL SCROLLBAR
 ::-webkit-scrollbar-corner {
   background: transparent;
 }
+
+/* =========================================================
+   VICTOR OS — NAVIGATION SAFE AREA
+========================================================= */
+
+:root {
+  --navbar-safe-space: 90px;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --navbar-safe-space: 82px;
+  }
+}
