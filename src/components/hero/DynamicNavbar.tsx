@@ -12,6 +12,7 @@ interface DynamicNavbarProps {
   onProjectsClick: () => void;
   onContactClick: () => void;
 }
+
 export default function DynamicNavbar({
   coreActive,
   setCoreActive,
@@ -77,13 +78,41 @@ export default function DynamicNavbar({
               transition={{
                 duration: 0.3,
               }}
-              className="flex items-center gap-2 font-mono text-sm whitespace-nowrap"
+              className="flex items-center gap-2 font-mono whitespace-nowrap"
             >
-              <motion.span className="h-3 w-3 rounded-full bg-orange-500 shadow-[0_0_20px_rgba(249,115,22,0.9)]" />
+              <motion.span
+                className="h-3 w-3 rounded-full bg-orange-500 shadow-[0_0_20px_rgba(249,115,22,0.9)]"
+                animate={{
+                  opacity: [1, 0.45, 1],
+                  scale: [1, 0.9, 1],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+              />
 
-              <span>VICTOR OS</span>
+              <span className="text-sm">VICTOR OS</span>
 
-              <span className="text-blue-400">ONLINE</span>
+              <span className="text-gray-600">//</span>
+
+              <span className="text-blue-400">MENU</span>
+
+              <motion.span
+                animate={{
+                  x: [0, 3, 0],
+                  opacity: [0.5, 1, 0.5],
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+                className="ml-1 text-[10px] text-gray-500"
+              >
+                →
+              </motion.span>
             </motion.div>
           )}
 

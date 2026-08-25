@@ -24,7 +24,7 @@ export default function AeroFlipTransition({ flipped, front, back }: AeroFlipTra
           flipped ? 'pointer-events-none' : 'pointer-events-auto'
         }`}
         animate={{
-          scale: flipped ? 0.72 : 1,
+          scale: flipped ? 1.2 : 1,
           z: flipped ? -500 : 0,
           rotateY: flipped ? -8 : 0,
           opacity: flipped ? 0 : 1,

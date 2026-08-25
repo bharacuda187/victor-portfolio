@@ -112,47 +112,63 @@ export default function InterfaceTransition({ active, onEnter }: InterfaceTransi
                 </motion.p>
               </motion.div>
             ) : (
-              <motion.button
+              <motion.div
                 key="logo"
-                type="button"
-                onClick={enterInterface}
-                className="group relative z-10 flex flex-col items-center font-mono outline-none"
-                initial={{
-                  opacity: 0,
-                  scale: 0.7,
-                  filter: 'blur(12px)',
-                }}
-                animate={{
-                  opacity: 1,
-                  scale: 1,
-                  filter: 'blur(0px)',
-                }}
-                transition={{
-                  duration: 1.2,
-                  ease: 'easeOut',
-                }}
-                whileHover={{
-                  scale: 1.06,
-                }}
-                whileTap={{
-                  scale: 0.96,
-                }}
+                className="relative z-10 flex flex-col items-center font-mono"
+                initial={{ opacity: 0, scale: 0.7, filter: 'blur(12px)' }}
+                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                transition={{ duration: 1.2, ease: 'easeOut' }}
               >
-                {/* Logo core */}
-                <div className="relative flex h-28 w-28 items-center justify-center rounded-full border border-orange-500/60">
-                  <div className="absolute inset-3 rounded-full border border-blue-400/40" />
-
-                  <div className="absolute inset-0 rounded-full border border-orange-500/20 transition-all duration-500 group-hover:scale-125 group-hover:border-orange-500/50" />
-
-                  <span className="text-4xl font-bold tracking-tight text-white">V</span>
-                </div>
-
-                <span className="mt-6 text-lg tracking-[0.35em] text-white">VICTOR OS</span>
-
-                <span className="mt-3 text-xs tracking-[0.3em] text-orange-500 opacity-70 transition-opacity duration-300 group-hover:opacity-100">
-                  ENTER SYSTEM
-                </span>
-              </motion.button>
+                {' '}
+                {/* Entry instruction */}{' '}
+                <motion.div
+                  className="mb-6 flex items-center gap-3 text-[10px] tracking-[0.3em] text-gray-500"
+                  animate={{ opacity: [0.45, 1, 0.45] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  {' '}
+                  <span className="h-px w-8 bg-orange-500/40" /> <span>CLICK THE V TO ENTER</span>{' '}
+                  <span className="h-px w-8 bg-orange-500/40" />{' '}
+                </motion.div>{' '}
+                {/* V Entry Button */}{' '}
+                <motion.button
+                  type="button"
+                  onClick={enterInterface}
+                  aria-label="Click the V to enter Victor OS"
+                  className="group relative flex h-32 w-32 items-center justify-center rounded-full outline-none"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2, duration: 0.8, ease: 'easeOut' }}
+                  whileHover={{ scale: 1.08 }}
+                  whileTap={{ scale: 0.94 }}
+                >
+                  {' '}
+                  {/* Outer pulse */}{' '}
+                  <motion.div
+                    className="absolute inset-0 rounded-full border border-orange-500/30"
+                    animate={{ scale: [1, 1.18, 1], opacity: [0.7, 0, 0.7] }}
+                    transition={{ duration: 2.4, repeat: Infinity, ease: 'easeOut' }}
+                  />{' '}
+                  {/* Hover ring */}{' '}
+                  <div className="absolute inset-0 rounded-full border border-orange-500/50 transition-all duration-500 group-hover:scale-110 group-hover:border-orange-500" />{' '}
+                  {/* Logo core */}{' '}
+                  <div className="relative flex h-28 w-28 items-center justify-center rounded-full border border-orange-500/60 bg-black/40 shadow-[0_0_40px_rgba(249,115,22,0.08)] backdrop-blur-sm transition-all duration-500 group-hover:border-orange-500 group-hover:shadow-[0_0_60px_rgba(249,115,22,0.25)]">
+                    {' '}
+                    <div className="absolute inset-3 rounded-full border border-blue-400/40" />{' '}
+                    <div className="absolute inset-0 rounded-full border border-orange-500/20 transition-all duration-500 group-hover:scale-125 group-hover:border-orange-500/50" />{' '}
+                    <span className="relative text-5xl font-bold tracking-tight text-white transition-colors duration-300 group-hover:text-orange-500">
+                      {' '}
+                      V{' '}
+                    </span>{' '}
+                  </div>{' '}
+                </motion.button>{' '}
+                {/* System identity */}{' '}
+                <span className="mt-6 text-lg tracking-[0.35em] text-white"> VICTOR OS </span>{' '}
+                <span className="mt-2 font-mono text-[9px] tracking-[0.25em] text-gray-600">
+                  {' '}
+                  SYSTEM INTERFACE{' '}
+                </span>{' '}
+              </motion.div>
             )}
           </AnimatePresence>
         </motion.div>
