@@ -106,7 +106,7 @@ export default function ContactPage() {
             <ContactCard
               index="02"
               label="LINKEDIN"
-              value="linkedin.com/in/yourprofile"
+              value="linkedin.com/in/victor-atilano-tan-singco/"
               description="Professional profile, experience, background, and career information."
               href="https://www.linkedin.com/in/victor-atilano-tan-singco/"
               accent="blue"
@@ -115,7 +115,7 @@ export default function ContactPage() {
             <ContactCard
               index="03"
               label="GITHUB"
-              value="github.com/yourusername"
+              value="github.com/bharacuda187"
               description="Code repositories, experiments, web projects, and development work."
               href="https://github.com/bharacuda187"
               accent="orange"
