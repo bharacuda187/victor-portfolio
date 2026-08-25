@@ -889,8 +889,13 @@ function DefaultContent({ app }: { app: string }) {
 }
 
 export default function OSModal({ app, onClose }: OSModalProps) {
+  const modalContentRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (!app) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -901,87 +906,130 @@ export default function OSModal({ app, onClose }: OSModalProps) {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
+      document.body.style.overflow = originalOverflow;
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [app, onClose]);
 
-  const modalContentRef = useRef<HTMLDivElement>(null);
-
-  const handleModalWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+  const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
     const container = modalContentRef.current;
 
     if (!container) return;
 
-    // Projects has its own horizontal wheel system.
+    /*
+     * Projects has its own horizontal wheel system.
+     * Let the ProjectsContent handler handle it.
+     */
     if (app === 'PROJECTS') return;
 
-    container.scrollBy({
-      top: event.deltaY,
-      behavior: 'smooth',
-    });
+    event.preventDefault();
+
+    container.scrollTop += event.deltaY;
   };
 
   return (
     <AnimatePresence>
       {app && (
-        <>
+        <div className="fixed inset-0 z-[9999] isolate">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.2 }}
             onClick={onClose}
-            className="fixed inset-0 z-[90] bg-black/60"
+            className="absolute inset-0 bg-black/75 backdrop-blur-[2px]"
           />
 
-          {/* Modal */}
-          <motion.div
-            initial={{
-              opacity: 0,
-              scale: 0.7,
-              rotateX: 12,
-              y: 40,
-            }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-              rotateX: 0,
-              y: 0,
-            }}
-            exit={{
-              opacity: 0,
-              scale: 0.7,
-              rotateX: -8,
-              y: 30,
-            }}
-            transition={{
-              type: 'spring',
-              stiffness: 180,
-              damping: 20,
-            }}
-            className="fixed top-1/2 left-1/2 z-[100] w-[min(1100px,90vw)] -translate-x-1/2 -translate-y-1/2"
-            style={{
-              perspective: '1200px',
-            }}
+          {/* Modal positioning */}
+          <div
+            className="
+              absolute
+              inset-0
+              flex
+              items-start
+              justify-center
+              overflow-hidden
+              px-3
+              pb-3
+              pt-20
+              sm:px-5
+              sm:pb-5
+              sm:pt-24
+              md:px-8
+              md:pb-8
+              md:pt-28
+            "
           >
-            <div
-              ref={modalContentRef}
-              onWheel={handleModalWheel}
-              onClick={(event) => event.stopPropagation()}
-              className="relative max-h-[85vh] overflow-x-hidden overflow-y-auto rounded-2xl border border-orange-500/30 bg-black/90 shadow-[0_0_80px_rgba(249,115,22,0.15)]"
+            <motion.div
+              initial={{
+                opacity: 0,
+                scale: 0.96,
+                y: 25,
+                filter: 'blur(4px)',
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                y: 0,
+                filter: 'blur(0px)',
+              }}
+              exit={{
+                opacity: 0,
+                scale: 0.97,
+                y: 15,
+                filter: 'blur(3px)',
+              }}
+              transition={{
+                duration: 0.25,
+                ease: 'easeOut',
+              }}
+              className="
+                relative
+                flex
+                h-full
+                w-full
+                max-w-[1200px]
+                flex-col
+                overflow-hidden
+                rounded-xl
+                border
+                border-orange-500/30
+                bg-black/95
+                shadow-[0_0_80px_rgba(249,115,22,0.12)]
+                sm:rounded-2xl
+                md:h-auto
+                md:max-h-[calc(100dvh-160px)]
+              "
             >
-              {/* Top glow */}
-              <div className="pointer-events-none absolute top-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-70" />
+              {/* Top HUD line */}
+              <div className="pointer-events-none absolute left-0 right-0 top-0 z-40 h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-80" />
 
               {/* Header */}
-              <div className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-white/10 bg-black/90 px-6">
-                <div className="flex items-center gap-3">
-                  <span className="h-2.5 w-2.5 rounded-full bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.9)]" />
+              <div
+                className="
+                  relative
+                  z-30
+                  flex
+                  h-14
+                  shrink-0
+                  items-center
+                  justify-between
+                  border-b
+                  border-white/10
+                  bg-black
+                  px-4
+                  sm:px-6
+                "
+              >
+                <div className="flex min-w-0 items-center gap-3">
+                  <span className="h-2 w-2 shrink-0 rounded-full bg-orange-500 shadow-[0_0_12px_rgba(249,115,22,0.9)]" />
 
-                  <span className="font-mono text-sm tracking-[0.2em] text-orange-400">{app}</span>
+                  <span className="truncate font-mono text-xs tracking-[0.18em] text-orange-400 sm:text-sm sm:tracking-[0.2em]">
+                    {app}
+                  </span>
 
-                  <span className="hidden font-mono text-[10px] tracking-widest text-gray-500 sm:inline">
+                  <span className="hidden font-mono text-[9px] tracking-widest text-gray-600 md:inline">
                     SYSTEM MODULE
                   </span>
                 </div>
@@ -989,44 +1037,80 @@ export default function OSModal({ app, onClose }: OSModalProps) {
                 <button
                   type="button"
                   onClick={onClose}
-                  className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 text-gray-400 transition hover:border-orange-500/40 hover:bg-orange-500/10 hover:text-orange-400"
+                  className="
+                    ml-4
+                    flex
+                    h-8
+                    w-8
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-full
+                    border
+                    border-white/10
+                    bg-white/[0.02]
+                    font-mono
+                    text-lg
+                    leading-none
+                    text-gray-500
+                    transition
+                    hover:border-orange-500/40
+                    hover:bg-orange-500/10
+                    hover:text-orange-400
+                    active:scale-95
+                  "
                   aria-label="Close"
                 >
                   ×
                 </button>
               </div>
 
-              {/* Content */}
-              <div className="p-6 md:p-8">
-                {app === 'PROJECTS' ? (
-                  <ProjectsContent />
-                ) : app === 'LIKHA SURVIVAL' ? (
-                  <LikhaContent />
-                ) : app === 'AI LAB' ? (
-                  <AILabContent />
-                ) : app === 'TECH STACK' ? (
-                  <TechStackContent />
-                ) : app === 'CONTACT' ? (
-                  <ContactContent />
-                ) : (
-                  <DefaultContent app={app} />
-                )}
+              {/* Scrollable content */}
+              <div
+                ref={modalContentRef}
+                onWheel={handleWheel}
+                className="
+                  min-h-0
+                  flex-1
+                  overflow-x-hidden
+                  overflow-y-auto
+                  overscroll-contain
+                  scroll-smooth
+                  [scrollbar-width:thin]
+                  [scrollbar-color:rgba(249,115,22,0.35)_transparent]
+                "
+              >
+                <div className="p-4 sm:p-6 md:p-8">
+                  {app === 'PROJECTS' ? (
+                    <ProjectsContent />
+                  ) : app === 'LIKHA SURVIVAL' ? (
+                    <LikhaContent />
+                  ) : app === 'AI LAB' ? (
+                    <AILabContent />
+                  ) : app === 'TECH STACK' ? (
+                    <TechStackContent />
+                  ) : app === 'CONTACT' ? (
+                    <ContactContent />
+                  ) : (
+                    <DefaultContent app={app} />
+                  )}
+                </div>
               </div>
 
-              {/* HUD lines */}
-              <div className="pointer-events-none absolute bottom-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-blue-400/50 to-transparent" />
+              {/* Bottom HUD line */}
+              <div className="pointer-events-none absolute bottom-0 left-0 z-40 h-px w-full bg-gradient-to-r from-transparent via-blue-400/50 to-transparent" />
 
               {/* Corner accents */}
-              <div className="pointer-events-none absolute top-3 left-3 h-4 w-4 border-t border-l border-orange-500/50" />
+              <div className="pointer-events-none absolute left-2 top-2 z-50 h-4 w-4 border-l border-t border-orange-500/60 sm:left-3 sm:top-3" />
 
-              <div className="pointer-events-none absolute top-3 right-3 h-4 w-4 border-t border-r border-orange-500/50" />
+              <div className="pointer-events-none absolute right-2 top-2 z-50 h-4 w-4 border-r border-t border-orange-500/60 sm:right-3 sm:top-3" />
 
-              <div className="pointer-events-none absolute bottom-3 left-3 h-4 w-4 border-b border-l border-blue-400/40" />
+              <div className="pointer-events-none absolute bottom-2 left-2 z-50 h-4 w-4 border-b border-l border-blue-400/50 sm:bottom-3 sm:left-3" />
 
-              <div className="pointer-events-none absolute right-3 bottom-3 h-4 w-4 border-r border-b border-blue-400/40" />
-            </div>
-          </motion.div>
-        </>
+              <div className="pointer-events-none absolute bottom-2 right-2 z-50 h-4 w-4 border-b border-r border-blue-400/50 sm:bottom-3 sm:right-3" />
+            </motion.div>
+          </div>
+        </div>
       )}
     </AnimatePresence>
   );
