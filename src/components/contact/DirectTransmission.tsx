@@ -1,13 +1,96 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (
+        container: HTMLElement,
+        options: {
+          sitekey: string;
+          theme?: 'auto' | 'light' | 'dark';
+          appearance?: 'always' | 'execute' | 'interaction-only';
+          callback?: (token: string) => void;
+          'error-callback'?: () => void;
+          'expired-callback'?: () => void;
+        },
+      ) => string;
+      reset: (widgetId?: string) => void;
+    };
+  }
+}
 
 export default function DirectTransmission() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+
+  const turnstileRef = useRef<HTMLDivElement>(null);
+  const turnstileWidgetId = useRef<string | null>(null);
+
+  const [turnstileToken, setTurnstileToken] = useState('');
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const renderTurnstile = () => {
+      if (!window.turnstile || !turnstileRef.current || turnstileWidgetId.current) {
+        return;
+      }
+
+      turnstileWidgetId.current = window.turnstile.render(turnstileRef.current, {
+        sitekey: '0x4AAAAAAEiMZJuMl9LoyE7B',
+        theme: 'dark',
+        appearance: 'interaction-only',
+
+        callback: (token) => {
+          setTurnstileToken(token);
+        },
+
+        'error-callback': () => {
+          setTurnstileToken('');
+        },
+
+        'expired-callback': () => {
+          setTurnstileToken('');
+        },
+      });
+    };
+
+    if (window.turnstile) {
+      renderTurnstile();
+      return;
+    }
+
+    const existingScript = document.querySelector(
+      'script[src^="https://challenges.cloudflare.com/turnstile/"]',
+    );
+
+    if (existingScript) {
+      existingScript.addEventListener('load', renderTurnstile);
+      return () => {
+        existingScript.removeEventListener('load', renderTurnstile);
+      };
+    }
+
+    const script = document.createElement('script');
+
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+
+    script.async = true;
+    script.defer = true;
+
+    script.addEventListener('load', renderTurnstile);
+
+    document.head.appendChild(script);
+
+    return () => {
+      script.removeEventListener('load', renderTurnstile);
+    };
+  }, [isOpen]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -19,16 +102,23 @@ export default function DirectTransmission() {
     setErrorMessage('');
 
     const form = event.currentTarget;
+
     const formData = new FormData(form);
 
-    formData.append('access_key', process.env.NEXT_PUBLIC_WEB3FORMS_KEY || '');
-    formData.append('subject', 'Portfolio Direct Transmission');
-    formData.append('from_name', 'Victor Atilano Tan Singco — Portfolio');
+    const payload = {
+      name: String(formData.get('name') || '').trim(),
+      email: String(formData.get('email') || '').trim(),
+      message: String(formData.get('message') || '').trim(),
+      turnstileToken: String(formData.get('cf-turnstile-response') || '').trim(),
+    };
 
     try {
-      const response = await fetch('https://api.web3forms.com/submit', {
+      const response = await fetch('/api/contact', {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
       });
 
       const data = (await response.json()) as {
@@ -194,6 +284,8 @@ export default function DirectTransmission() {
                     tabIndex={-1}
                     autoComplete="off"
                   />
+                  {/* Cloudflare Turnstile */}
+                  <div ref={turnstileRef} className="flex justify-center overflow-hidden" />
 
                   {/* Error */}
                   {status === 'error' && (
