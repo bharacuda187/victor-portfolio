@@ -44,7 +44,7 @@ export default function DirectTransmission() {
       turnstileWidgetId.current = window.turnstile.render(turnstileRef.current, {
         sitekey: '0x4AAAAAAEiMZJuMl9LoyE7B',
         theme: 'dark',
-        appearance: 'interaction-only',
+        appearance: 'always',
 
         callback: (token) => {
           setTurnstileToken(token);
@@ -97,6 +97,12 @@ export default function DirectTransmission() {
 
     if (isSending) return;
 
+    if (!turnstileToken) {
+      setStatus('error');
+      setErrorMessage('SECURITY VERIFICATION REQUIRED.');
+      return;
+    }
+
     setIsSending(true);
     setStatus('idle');
     setErrorMessage('');
@@ -109,7 +115,7 @@ export default function DirectTransmission() {
       name: String(formData.get('name') || '').trim(),
       email: String(formData.get('email') || '').trim(),
       message: String(formData.get('message') || '').trim(),
-      turnstileToken: String(formData.get('cf-turnstile-response') || '').trim(),
+      turnstileToken,
     };
 
     try {
@@ -144,6 +150,11 @@ export default function DirectTransmission() {
   const resetTransmission = () => {
     setStatus('idle');
     setErrorMessage('');
+    setTurnstileToken('');
+
+    if (window.turnstile && turnstileWidgetId.current) {
+      window.turnstile.reset(turnstileWidgetId.current);
+    }
   };
 
   return (
@@ -307,7 +318,7 @@ export default function DirectTransmission() {
                   {/* Submit */}
                   <button
                     type="submit"
-                    disabled={isSending}
+                    disabled={isSending || !turnstileToken}
                     className="w-full rounded-lg border border-orange-500/30 bg-orange-500/10 py-3 font-mono text-[10px] tracking-[0.2em] text-orange-400 transition hover:border-orange-500/60 hover:bg-orange-500/15 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {isSending ? 'TRANSMITTING...' : 'TRANSMIT MESSAGE →'}
