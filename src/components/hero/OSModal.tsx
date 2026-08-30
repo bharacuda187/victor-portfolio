@@ -720,6 +720,10 @@ function TechStackContent() {
 }
 
 function ContactContent() {
+  const [isSending, setIsSending] = useState(false);
+  const [sendStatus, setSendStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [sendMessage, setSendMessage] = useState('');
+
   const channels = [
     {
       label: 'EMAIL',
@@ -832,32 +836,117 @@ function ContactContent() {
           <span className="h-px flex-1 bg-white/10" />
         </div>
 
-        <div className="mt-5 space-y-3">
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+
+            if (isSending) return;
+
+            setIsSending(true);
+            setSendStatus('idle');
+            setSendMessage('');
+
+            const form = e.currentTarget;
+            const formData = new FormData(form);
+
+            formData.append('access_key', process.env.NEXT_PUBLIC_WEB3FORMS_KEY || '');
+            formData.append('subject', 'Portfolio Direct Transmission');
+            formData.append('from_name', 'Victor Atilano Tan Singco — Portfolio');
+
+            try {
+              const response = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: formData,
+              });
+
+              const data = (await response.json()) as {
+                success?: boolean;
+                message?: string;
+              };
+
+              if (data.success) {
+                form.reset();
+                setSendStatus('success');
+                setSendMessage('TRANSMISSION RECEIVED. CHANNEL CLOSED.');
+              } else {
+                setSendStatus('error');
+                setSendMessage(data.message || 'TRANSMISSION FAILED. PLEASE TRY AGAIN.');
+              }
+            } catch {
+              setSendStatus('error');
+              setSendMessage('TRANSMISSION ERROR. PLEASE CHECK YOUR CONNECTION.');
+            } finally {
+              setIsSending(false);
+            }
+          }}
+          className="mt-5 space-y-3"
+        >
           <input
             type="text"
+            name="name"
             placeholder="YOUR NAME"
-            className="w-full rounded-lg border border-white/10 bg-white/[0.025] px-4 py-3 font-mono text-xs text-gray-300 outline-none placeholder:text-gray-700 focus:border-orange-500/40"
+            required
+            disabled={isSending}
+            className="w-full rounded-lg border border-white/10 bg-white/[0.025] px-4 py-3 font-mono text-xs text-gray-300 outline-none placeholder:text-gray-700 focus:border-orange-500/40 disabled:cursor-not-allowed disabled:opacity-50"
           />
 
           <input
             type="email"
+            name="email"
             placeholder="YOUR EMAIL"
-            className="w-full rounded-lg border border-white/10 bg-white/[0.025] px-4 py-3 font-mono text-xs text-gray-300 outline-none placeholder:text-gray-700 focus:border-orange-500/40"
+            required
+            disabled={isSending}
+            className="w-full rounded-lg border border-white/10 bg-white/[0.025] px-4 py-3 font-mono text-xs text-gray-300 outline-none placeholder:text-gray-700 focus:border-orange-500/40 disabled:cursor-not-allowed disabled:opacity-50"
           />
 
           <textarea
+            name="message"
             rows={4}
             placeholder="TRANSMISSION MESSAGE..."
-            className="w-full resize-none rounded-lg border border-white/10 bg-white/[0.025] px-4 py-3 font-mono text-xs text-gray-300 outline-none placeholder:text-gray-700 focus:border-orange-500/40"
+            required
+            disabled={isSending}
+            className="w-full resize-none rounded-lg border border-white/10 bg-white/[0.025] px-4 py-3 font-mono text-xs text-gray-300 outline-none placeholder:text-gray-700 focus:border-orange-500/40 disabled:cursor-not-allowed disabled:opacity-50"
+          />
+
+          {/* Honeypot spam protection */}
+          <input
+            type="checkbox"
+            name="botcheck"
+            className="hidden"
+            tabIndex={-1}
+            autoComplete="off"
           />
 
           <button
-            type="button"
-            className="w-full rounded-lg border border-orange-500/30 bg-orange-500/10 py-3 font-mono text-[10px] tracking-[0.2em] text-orange-400 transition hover:border-orange-500/60 hover:bg-orange-500/15"
+            type="submit"
+            disabled={isSending}
+            className="w-full rounded-lg border border-orange-500/30 bg-orange-500/10 py-3 font-mono text-[10px] tracking-[0.2em] text-orange-400 transition hover:border-orange-500/60 hover:bg-orange-500/15 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            TRANSMIT MESSAGE →
+            {isSending ? 'TRANSMITTING...' : 'TRANSMIT MESSAGE →'}
           </button>
-        </div>
+
+          {/* Transmission status */}
+          <AnimatePresence mode="wait">
+            {sendStatus !== 'idle' && (
+              <motion.div
+                key={sendStatus}
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -5 }}
+                className={`rounded-lg border px-3 py-3 font-mono text-[9px] tracking-wider ${
+                  sendStatus === 'success'
+                    ? 'border-green-500/20 bg-green-500/[0.04] text-green-400'
+                    : 'border-red-500/20 bg-red-500/[0.04] text-red-400'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <span>{sendStatus === 'success' ? '✓' : '⚠'}</span>
+                  <span>{sendMessage}</span>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </form>
       </div>
 
       {/* Terminal */}
