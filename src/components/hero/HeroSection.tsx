@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
+import ReactMarkdown from 'react-markdown';
 import { Canvas } from '@react-three/fiber';
 import { Environment, OrbitControls, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
@@ -526,9 +527,37 @@ export default function HeroSection({ onProfileClick, profileActive }: HeroSecti
                   {msg.role === 'assistant' ? 'CORE' : 'YOU'}
                 </div>
 
-                <p className="text-xs leading-relaxed break-words whitespace-pre-wrap text-gray-300">
-                  {msg.content}
-                </p>
+                <div className="text-xs leading-relaxed break-words text-gray-300">
+                  <ReactMarkdown
+                    components={{
+                      p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+
+                      strong: ({ children }) => (
+                        <strong className="font-semibold text-white">{children}</strong>
+                      ),
+
+                      em: ({ children }) => <em className="text-gray-200">{children}</em>,
+
+                      ul: ({ children }) => (
+                        <ul className="my-2 list-disc space-y-1 pl-5">{children}</ul>
+                      ),
+
+                      ol: ({ children }) => (
+                        <ol className="my-2 list-decimal space-y-1 pl-5">{children}</ol>
+                      ),
+
+                      li: ({ children }) => <li className="pl-1">{children}</li>,
+
+                      code: ({ children }) => (
+                        <code className="rounded bg-white/10 px-1.5 py-0.5 text-[11px] text-orange-300">
+                          {children}
+                        </code>
+                      ),
+                    }}
+                  >
+                    {msg.content}
+                  </ReactMarkdown>
+                </div>
               </motion.div>
             ))}
 
