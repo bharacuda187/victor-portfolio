@@ -2,6 +2,8 @@
 
 import { motion } from 'motion/react';
 
+import DirectTransmission from '@/components/contact/DirectTransmission';
+
 export default function ContactPage() {
   return (
     <section className="relative h-full w-full overflow-hidden bg-black text-white">
@@ -206,13 +208,7 @@ export default function ContactPage() {
                   digital system built from the ground up, let's start the conversation.
                 </p>
 
-                <a
-                  href="mailto:victor.tansingco@victortansingco.com"
-                  className="mt-8 inline-flex items-center gap-3 border border-orange-500/40 px-6 py-3 font-mono text-[10px] tracking-[0.25em] text-orange-500 transition-all duration-300 hover:bg-orange-500/10 hover:shadow-[0_0_30px_rgba(249,115,22,0.12)]"
-                >
-                  SEND TRANSMISSION
-                  <span>→</span>
-                </a>
+                <DirectTransmission />
               </div>
             </div>
           </motion.div>
