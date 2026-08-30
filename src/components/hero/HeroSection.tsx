@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import ReactMarkdown from 'react-markdown';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { Environment, OrbitControls, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import { GLTF } from 'three-stdlib';
@@ -28,6 +28,7 @@ type GLTFResult = GLTF & {
 
 interface CyberOrbProps {
   active: boolean;
+  answering: boolean;
   onClick: () => void;
 }
 
@@ -45,8 +46,9 @@ interface ChatApiResponse {
   error?: string;
 }
 
-function CyberOrb({ active, onClick }: CyberOrbProps) {
+function CyberOrb({ active, answering, onClick }: CyberOrbProps) {
   const { nodes } = useGLTF('/media/robobit.glb') as unknown as GLTFResult;
+  const hasIntroPlayed = useRef(false);
 
   const MODEL_CONFIG = {
     rotation: [Math.PI / -2.5, 0, 0] as [number, number, number],
@@ -62,8 +64,53 @@ function CyberOrb({ active, onClick }: CyberOrbProps) {
     maxDistance: 5,
   };
 
+  const groupRef = useRef<THREE.Group>(null);
+
+  useFrame((state) => {
+    if (!groupRef.current) return;
+
+    const time = state.clock.elapsedTime;
+
+    if (!hasIntroPlayed.current) {
+      const introDuration = 2.2;
+
+      if (time < introDuration) {
+        const progress = time / introDuration;
+
+        // Smooth 0 → 1 → 0 style motion.
+        const tilt = Math.sin(progress * Math.PI * 2.5) * THREE.MathUtils.degToRad(9);
+
+        const bounce = Math.sin(progress * Math.PI * 2) * THREE.MathUtils.degToRad(3);
+
+        groupRef.current.rotation.z = tilt;
+        groupRef.current.rotation.x = MODEL_CONFIG.rotation[0] + bounce;
+      } else {
+        groupRef.current.rotation.z = 0;
+        groupRef.current.rotation.x = MODEL_CONFIG.rotation[0];
+        hasIntroPlayed.current = true;
+      }
+
+      return;
+    }
+
+    if (answering) {
+      const nod = Math.sin(time * 4.2) * THREE.MathUtils.degToRad(4);
+
+      groupRef.current.rotation.x = MODEL_CONFIG.rotation[0] + nod;
+    } else {
+      // Smoothly settle back to neutral.
+      groupRef.current.rotation.x = THREE.MathUtils.lerp(
+        groupRef.current.rotation.x,
+        MODEL_CONFIG.rotation[0],
+        0.08,
+      );
+
+      groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, 0, 0.08);
+    }
+  });
   return (
     <group
+      ref={groupRef}
       scale={MODEL_CONFIG.scale}
       rotation={MODEL_CONFIG.rotation}
       position={MODEL_CONFIG.position}
@@ -425,7 +472,11 @@ export default function HeroSection({ onProfileClick, profileActive }: HeroSecti
 
                   <directionalLight position={[3, 3, 3]} intensity={2} />
 
-                  <CyberOrb active={!profileActive} onClick={() => setAiOpen(true)} />
+                  <CyberOrb
+                    active={!profileActive}
+                    answering={isTyping}
+                    onClick={() => setAiOpen(true)}
+                  />
 
                   <Environment preset="city" />
                 </Canvas>
