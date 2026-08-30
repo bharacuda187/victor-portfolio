@@ -1,10 +1,25 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "victor-portfolio",
+
+  "name": "portfolio",
+
+  "main": "worker/index.ts",
+
   "compatibility_date": "2026-08-23",
+
+  "workers_dev": false,
+
+  "preview_urls": false,
+
+  "ai": {
+    "binding": "AI",
+  },
+
   "assets": {
     "directory": "./out",
+    "binding": "ASSETS",
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"],
   },
 }

@@ -256,11 +256,11 @@ export default function FloatingWidget() {
           delay: 2.4,
           ease: [0.16, 1, 0.3, 1],
         }}
-        className="absolute right-10 bottom-10 z-20 hidden w-[250px] overflow-hidden rounded-xl border border-white/10 bg-black/60 font-mono backdrop-blur-xl md:block"
+        className="absolute right-10 bottom-10 z-20 hidden w-[520px] overflow-hidden rounded-xl border border-white/10 bg-black/60 font-mono backdrop-blur-xl md:block"
       >
         {/* HEADER */}
 
-        <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.03] px-3 py-2">
+        <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.03] px-4 py-2">
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.8)]" />
 
@@ -272,12 +272,12 @@ export default function FloatingWidget() {
           <span className="text-[8px] tracking-widest text-blue-400">01</span>
         </div>
 
-        {/* CONTENT */}
+        {/* STATUS ROW */}
 
-        <div className="p-4">
+        <div className="flex items-center gap-5 px-4 py-3">
           {/* ONLINE */}
 
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <motion.span
               animate={{
                 opacity: [0.4, 1, 0.4],
@@ -291,50 +291,44 @@ export default function FloatingWidget() {
               className="h-2 w-2 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.8)]"
             />
 
-            <span className="text-base font-semibold tracking-[0.15em] text-blue-400 uppercase">
+            <span className="text-sm font-semibold tracking-[0.15em] text-blue-400 uppercase">
               ONLINE
             </span>
           </div>
 
-          {/* DIVIDER */}
+          {/* NETWORK */}
 
-          <div className="my-3 h-px bg-gradient-to-r from-orange-500/50 via-blue-400/20 to-transparent" />
+          <div className="flex flex-1 items-center gap-3 border-l border-white/10 pl-4">
+            <span className="text-[8px] tracking-[0.2em] text-gray-600 uppercase">NETWORK</span>
 
-          {/* NETWORK STATUS */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+              {/* CLOUDFLARE */}
 
-          <div>
-            <div className="mb-2 text-[9px] tracking-[0.25em] text-gray-500 uppercase">
-              NETWORK STATUS
-            </div>
-
-            <div className="space-y-2.5">
-              {/* CLOUDFLARE EDGE */}
-
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-orange-500 shadow-[0_0_7px_rgba(249,115,22,0.8)]" />
 
-                <span className="text-[9px] tracking-widest text-gray-400">CLOUDFLARE EDGE</span>
+                <span className="text-[8px] tracking-widest text-gray-400">CLOUDFLARE EDGE</span>
               </div>
 
               {/* TLS */}
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-blue-400 shadow-[0_0_7px_rgba(96,165,250,0.8)]" />
 
-                <span className="text-[9px] tracking-widest text-gray-400">TLS 1.3</span>
+                <span className="text-[8px] tracking-widest text-gray-400">TLS 1.3</span>
               </div>
 
               {/* HTTPS */}
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-blue-400 shadow-[0_0_7px_rgba(96,165,250,0.8)]" />
 
-                <span className="text-[9px] tracking-widest text-gray-400">HTTPS</span>
+                <span className="text-[8px] tracking-widest text-gray-400">HTTPS</span>
               </div>
 
               {/* SYSTEM ONLINE */}
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <motion.span
                   animate={{
                     opacity: [0.4, 1, 0.4],
@@ -347,30 +341,20 @@ export default function FloatingWidget() {
                   className="h-1.5 w-1.5 rounded-full bg-green-400 shadow-[0_0_7px_rgba(74,222,128,0.8)]"
                 />
 
-                <span className="text-[9px] tracking-widest text-green-400">SYSTEM ONLINE</span>
+                <span className="text-[8px] tracking-widest text-green-400">SYSTEM ONLINE</span>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* DIVIDER */}
+        {/* FOOTER */}
 
-          <div className="my-3 h-px bg-gradient-to-r from-orange-500/30 via-blue-400/20 to-transparent" />
+        <div className="flex items-center justify-between border-t border-white/10 px-4 py-2">
+          <span className="text-[8px] tracking-widest text-gray-600 uppercase">STACK</span>
 
-          {/* STACK */}
+          <span className="text-[9px] tracking-wider text-gray-300">NEXT.JS • UNITY</span>
 
-          <div className="flex items-center justify-between">
-            <span className="text-[9px] tracking-widest text-gray-500 uppercase">STACK</span>
-
-            <span className="text-[10px] tracking-wider text-gray-300">NEXT.JS • UNITY</span>
-          </div>
-
-          {/* INTERACTION HINT */}
-
-          <div className="mt-3 text-center">
-            <span className="text-[7px] tracking-[0.2em] text-gray-600 uppercase">
-              DOUBLE-TAP TO MINIMIZE
-            </span>
-          </div>
+          <span className="text-[7px] tracking-[0.2em] text-gray-600 uppercase">SYSTEM READY</span>
         </div>
 
         {/* BOTTOM ACCENT */}

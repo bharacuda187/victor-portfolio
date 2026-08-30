@@ -447,13 +447,7 @@ BACKGROUND GRID
           <HorizontalScroll>
             <AeroFlipTransition
               flipped={isBackPage}
-              front={
-                <HeroSection
-                  onProfileClick={goProfile}
-                  coreActive={coreActive}
-                  profileActive={false}
-                />
-              }
+              front={<HeroSection onProfileClick={goProfile} profileActive={false} />}
               back={
                 <>
                   {activePage === 'profile' && <ProfilePage onHomeClick={goHome} />}
