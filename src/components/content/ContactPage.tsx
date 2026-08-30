@@ -97,9 +97,9 @@ export default function ContactPage() {
             <ContactCard
               index="01"
               label="EMAIL"
-              value="victor.tansingco@hotmail.com"
+              value="victor.tansingco@victortansingco.com"
               description="Primary communication channel for professional inquiries, freelance work, and collaboration."
-              href="mailto:victor.tansingco@hotmail.com"
+              href="mailto:victor.tansingco@victortansingco.com"
               accent="orange"
             />
 
@@ -207,7 +207,7 @@ export default function ContactPage() {
                 </p>
 
                 <a
-                  href="mailto:victor.tansingco@hotmail.com"
+                  href="mailto:victor.tansingco@victortansingco.com"
                   className="mt-8 inline-flex items-center gap-3 border border-orange-500/40 px-6 py-3 font-mono text-[10px] tracking-[0.25em] text-orange-500 transition-all duration-300 hover:bg-orange-500/10 hover:shadow-[0_0_30px_rgba(249,115,22,0.12)]"
                 >
                   SEND TRANSMISSION

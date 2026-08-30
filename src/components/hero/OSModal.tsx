@@ -723,8 +723,8 @@ function ContactContent() {
   const channels = [
     {
       label: 'EMAIL',
-      value: 'victor.tansingco@hotmail.com',
-      href: 'mailto:victor.tansingco@hotmail.com',
+      value: 'victor.tansingco@victortansingco.com',
+      href: 'mailto:victor.tansingco@victortansingco.com',
       action: 'SEND MESSAGE',
     },
     {
@@ -930,7 +930,7 @@ export default function OSModal({ app, onClose }: OSModalProps) {
   return (
     <AnimatePresence>
       {app && (
-        <div className="fixed inset-0 z-[9999] isolate">
+        <div className="fixed inset-0 isolate z-[9999]">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -942,25 +942,7 @@ export default function OSModal({ app, onClose }: OSModalProps) {
           />
 
           {/* Modal positioning */}
-          <div
-            className="
-              absolute
-              inset-0
-              flex
-              items-start
-              justify-center
-              overflow-hidden
-              px-3
-              pb-3
-              pt-20
-              sm:px-5
-              sm:pb-5
-              sm:pt-24
-              md:px-8
-              md:pb-8
-              md:pt-28
-            "
-          >
+          <div className="absolute inset-0 flex items-start justify-center overflow-hidden px-3 pt-20 pb-3 sm:px-5 sm:pt-24 sm:pb-5 md:px-8 md:pt-28 md:pb-8">
             <motion.div
               initial={{
                 opacity: 0,
@@ -984,44 +966,13 @@ export default function OSModal({ app, onClose }: OSModalProps) {
                 duration: 0.25,
                 ease: 'easeOut',
               }}
-              className="
-                relative
-                flex
-                h-full
-                w-full
-                max-w-[1200px]
-                flex-col
-                overflow-hidden
-                rounded-xl
-                border
-                border-orange-500/30
-                bg-black/95
-                shadow-[0_0_80px_rgba(249,115,22,0.12)]
-                sm:rounded-2xl
-                md:h-auto
-                md:max-h-[calc(100dvh-160px)]
-              "
+              className="relative flex h-full w-full max-w-[1200px] flex-col overflow-hidden rounded-xl border border-orange-500/30 bg-black/95 shadow-[0_0_80px_rgba(249,115,22,0.12)] sm:rounded-2xl md:h-auto md:max-h-[calc(100dvh-160px)]"
             >
               {/* Top HUD line */}
-              <div className="pointer-events-none absolute left-0 right-0 top-0 z-40 h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-80" />
+              <div className="pointer-events-none absolute top-0 right-0 left-0 z-40 h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-80" />
 
               {/* Header */}
-              <div
-                className="
-                  relative
-                  z-30
-                  flex
-                  h-14
-                  shrink-0
-                  items-center
-                  justify-between
-                  border-b
-                  border-white/10
-                  bg-black
-                  px-4
-                  sm:px-6
-                "
-              >
+              <div className="relative z-30 flex h-14 shrink-0 items-center justify-between border-b border-white/10 bg-black px-4 sm:px-6">
                 <div className="flex min-w-0 items-center gap-3">
                   <span className="h-2 w-2 shrink-0 rounded-full bg-orange-500 shadow-[0_0_12px_rgba(249,115,22,0.9)]" />
 
@@ -1037,28 +988,7 @@ export default function OSModal({ app, onClose }: OSModalProps) {
                 <button
                   type="button"
                   onClick={onClose}
-                  className="
-                    ml-4
-                    flex
-                    h-8
-                    w-8
-                    shrink-0
-                    items-center
-                    justify-center
-                    rounded-full
-                    border
-                    border-white/10
-                    bg-white/[0.02]
-                    font-mono
-                    text-lg
-                    leading-none
-                    text-gray-500
-                    transition
-                    hover:border-orange-500/40
-                    hover:bg-orange-500/10
-                    hover:text-orange-400
-                    active:scale-95
-                  "
+                  className="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.02] font-mono text-lg leading-none text-gray-500 transition hover:border-orange-500/40 hover:bg-orange-500/10 hover:text-orange-400 active:scale-95"
                   aria-label="Close"
                 >
                   ×
@@ -1069,16 +999,7 @@ export default function OSModal({ app, onClose }: OSModalProps) {
               <div
                 ref={modalContentRef}
                 onWheel={handleWheel}
-                className="
-                  min-h-0
-                  flex-1
-                  overflow-x-hidden
-                  overflow-y-auto
-                  overscroll-contain
-                  scroll-smooth
-                  [scrollbar-width:thin]
-                  [scrollbar-color:rgba(249,115,22,0.35)_transparent]
-                "
+                className="min-h-0 flex-1 [scrollbar-width:thin] [scrollbar-color:rgba(249,115,22,0.35)_transparent] overflow-x-hidden overflow-y-auto overscroll-contain scroll-smooth"
               >
                 <div className="p-4 sm:p-6 md:p-8">
                   {app === 'PROJECTS' ? (
@@ -1101,13 +1022,13 @@ export default function OSModal({ app, onClose }: OSModalProps) {
               <div className="pointer-events-none absolute bottom-0 left-0 z-40 h-px w-full bg-gradient-to-r from-transparent via-blue-400/50 to-transparent" />
 
               {/* Corner accents */}
-              <div className="pointer-events-none absolute left-2 top-2 z-50 h-4 w-4 border-l border-t border-orange-500/60 sm:left-3 sm:top-3" />
+              <div className="pointer-events-none absolute top-2 left-2 z-50 h-4 w-4 border-t border-l border-orange-500/60 sm:top-3 sm:left-3" />
 
-              <div className="pointer-events-none absolute right-2 top-2 z-50 h-4 w-4 border-r border-t border-orange-500/60 sm:right-3 sm:top-3" />
+              <div className="pointer-events-none absolute top-2 right-2 z-50 h-4 w-4 border-t border-r border-orange-500/60 sm:top-3 sm:right-3" />
 
               <div className="pointer-events-none absolute bottom-2 left-2 z-50 h-4 w-4 border-b border-l border-blue-400/50 sm:bottom-3 sm:left-3" />
 
-              <div className="pointer-events-none absolute bottom-2 right-2 z-50 h-4 w-4 border-b border-r border-blue-400/50 sm:bottom-3 sm:right-3" />
+              <div className="pointer-events-none absolute right-2 bottom-2 z-50 h-4 w-4 border-r border-b border-blue-400/50 sm:right-3 sm:bottom-3" />
             </motion.div>
           </div>
         </div>
