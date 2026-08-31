@@ -3,6 +3,10 @@ export interface Env {
   ASSETS: Fetcher;
   TURNSTILE_SECRET_KEY: string;
   WEB3FORMS_ACCESS_KEY: string;
+
+  CORE_RATE_LIMITER: {
+    limit: (options: { key: string }) => Promise<{ success: boolean }>;
+  };
 }
 
 interface ChatRequest {
@@ -20,6 +24,24 @@ export default {
     if (url.pathname === '/api/chat') {
       if (request.method !== 'POST') {
         return Response.json({ error: 'Method Not Allowed' }, { status: 405 });
+      }
+
+      const visitorId =
+        request.headers.get('cf-connecting-ip') ||
+        request.headers.get('x-forwarded-for') ||
+        'unknown';
+
+      const { success } = await env.CORE_RATE_LIMITER.limit({
+        key: visitorId,
+      });
+
+      if (!success) {
+        return Response.json(
+          {
+            error: 'CORE RATE LIMIT REACHED. PLEASE WAIT A MOMENT BEFORE SENDING ANOTHER MESSAGE.',
+          },
+          { status: 429 },
+        );
       }
 
       try {

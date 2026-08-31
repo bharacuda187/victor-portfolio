@@ -15,6 +15,17 @@
     "binding": "AI",
   },
 
+  "ratelimits": [
+    {
+      "name": "CORE_RATE_LIMITER",
+      "namespace_id": "1001",
+      "simple": {
+        "limit": 10,
+        "period": 60,
+      },
+    },
+  ],
+
   "assets": {
     "directory": "./out",
     "binding": "ASSETS",
