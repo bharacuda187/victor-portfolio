@@ -39,26 +39,6 @@ const projects = [
     stack: ['NEXT.JS', 'REACT', 'MOTION', 'THREE.JS'],
     access: 'PUBLIC',
   },
-  {
-    name: 'LAE CITY HOTEL',
-    status: 'ACTIVE',
-    category: 'HOSPITALITY WEBSITE',
-    description:
-      'A simple and modern website for a hotel and restaurant in Lae City, Papua New Guinea, built with a focus on user experience and design.',
-    stack: ['HTML', 'CSS', 'JAVASCRIPT', 'BOOTSTRAP'],
-    access: 'PUBLIC',
-    href: 'https://laecityhotel.com/',
-  },
-  {
-    name: 'HOTEL MOROBE',
-    status: 'ACTIVE',
-    category: 'HOSPITALITY WEBSITE',
-    description:
-      'A simple and modern website for a hotel and restaurant in Lae City, Papua New Guinea, built with a focus on user experience and design.',
-    stack: ['HTML', 'CSS', 'JAVASCRIPT', 'BOOTSTRAP'],
-    access: 'PUBLIC',
-    href: 'https://hotelmorobe.com/',
-  },
 ];
 
 function ProjectsContent() {
