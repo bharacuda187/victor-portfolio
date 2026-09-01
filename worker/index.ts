@@ -182,27 +182,41 @@ Answer the visitor naturally.
         // VERIFY CLOUDFLARE TURNSTILE
         // ===================================================
 
+        const formData = new URLSearchParams();
+
+        formData.append('secret', env.TURNSTILE_SECRET_KEY);
+        formData.append('response', turnstileToken);
+
         const turnstileResponse = await fetch(
           'https://challenges.cloudflare.com/turnstile/v0/siteverify',
           {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: JSON.stringify({
-              secret: env.TURNSTILE_SECRET_KEY,
-              response: turnstileToken,
-            }),
+            body: formData.toString(),
           },
         );
 
         const turnstileResult = (await turnstileResponse.json()) as {
           success?: boolean;
+          hostname?: string;
+          action?: string;
           'error-codes'?: string[];
         };
 
-        if (!turnstileResult.success) {
-          console.warn('Turnstile verification failed:', turnstileResult['error-codes']);
+        const allowedHostnames = new Set(['victortansingco.com', 'www.victortansingco.com']);
+
+        if (
+          !turnstileResponse.ok ||
+          !turnstileResult.success ||
+          !allowedHostnames.has(turnstileResult.hostname ?? '')
+        ) {
+          console.warn('Turnstile verification failed:', {
+            status: turnstileResponse.status,
+            hostname: turnstileResult.hostname,
+            errors: turnstileResult['error-codes'],
+          });
 
           return Response.json(
             {
