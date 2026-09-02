@@ -35,7 +35,7 @@ function buildContentSecurityPolicy(nonce: string): string {
     "font-src 'self' data: https:",
     "connect-src 'self' https: wss:",
     "worker-src 'self' blob:",
-    "frame-src 'self' https://challenges.cloudflare.com",
+    "frame-src 'self' https://challenges.cloudflare.com https://render.jotform.com https://maps.google.com",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
