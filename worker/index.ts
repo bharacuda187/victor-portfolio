@@ -13,6 +13,37 @@ interface ChatRequest {
   message: string;
 }
 
+function generateNonce(): string {
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+
+  let binary = '';
+
+  for (const byte of bytes) {
+    binary += String.fromCharCode(byte);
+  }
+
+  return btoa(binary);
+}
+
+function buildContentSecurityPolicy(nonce: string): string {
+  return [
+    "default-src 'self'",
+    `script-src 'self' 'nonce-${nonce}' 'wasm-unsafe-eval' https://static.cloudflareinsights.com https://cdn.jsdelivr.net https://challenges.cloudflare.com`,
+    "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com",
+    "img-src 'self' data: blob: https:",
+    "font-src 'self' data: https:",
+    "connect-src 'self' https: wss:",
+    "worker-src 'self' blob:",
+    "frame-src 'self' https://challenges.cloudflare.com",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'self' https://likhadigital.com.au",
+    'upgrade-insecure-requests',
+  ].join('; ');
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
@@ -282,9 +313,46 @@ Answer the visitor naturally.
     }
 
     // =====================================================
-    // STATIC ASSETS
+    // STATIC ASSETS + CSP NONCE
     // =====================================================
 
-    return env.ASSETS.fetch(request);
+    const assetResponse = await env.ASSETS.fetch(request);
+
+    const contentType = assetResponse.headers.get('content-type') || '';
+
+    // Non-HTML assets are returned untouched so they remain
+    // cache-friendly and are not processed by HTMLRewriter.
+    if (!contentType.includes('text/html')) {
+      return assetResponse;
+    }
+
+    const nonce = generateNonce();
+
+    const transformedResponse = new HTMLRewriter()
+      .on('script', {
+        element(element) {
+          element.setAttribute('nonce', nonce);
+        },
+      })
+      .transform(assetResponse);
+
+    const headers = new Headers(transformedResponse.headers);
+
+    // Remove static/origin CSP headers before applying the
+    // per-request nonce policy.
+    headers.delete('Content-Security-Policy');
+    headers.delete('Content-Security-Policy-Report-Only');
+
+    headers.set('Content-Security-Policy', buildContentSecurityPolicy(nonce));
+
+    // Prevent a response containing a request-specific nonce
+    // from being reused as cached HTML.
+    headers.set('Cache-Control', 'no-store');
+
+    return new Response(transformedResponse.body, {
+      status: transformedResponse.status,
+      statusText: transformedResponse.statusText,
+      headers,
+    });
   },
 } satisfies ExportedHandler<Env>;
