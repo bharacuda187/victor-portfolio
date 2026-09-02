@@ -17,27 +17,12 @@ const telemetry = [
   { label: 'SIGNAL', value: '99.2%', position: 'bottom-[10%] right-[4%]' },
 ];
 
-export default function InterfaceTransition({
-  active,
-  onEnter,
-}: InterfaceTransitionProps) {
+export default function InterfaceTransition({ active, onEnter }: InterfaceTransitionProps) {
   useEffect(() => {
     if (!active) return;
 
     const timer = setTimeout(() => {
       onEnter();
-
-      setTimeout(() => {
-        const hero = document.getElementById('hero');
-
-        if (hero) {
-          hero.scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest',
-            inline: 'start',
-          });
-        }
-      }, 500);
     }, 1600);
 
     return () => clearTimeout(timer);
@@ -54,10 +39,10 @@ export default function InterfaceTransition({
           transition={{ duration: 0.6 }}
         >
           {/* Background grid */}
-          <div className="absolute inset-0 opacity-30 [background-image:linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] [background-size:50px_50px]" />
+          <div className="absolute inset-0 [background-image:linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] [background-size:50px_50px] opacity-30" />
 
           {/* Secondary micro grid */}
-          <div className="absolute inset-0 opacity-10 [background-image:linear-gradient(rgba(249,115,22,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.06)_1px,transparent_1px)] [background-size:10px_10px]" />
+          <div className="absolute inset-0 [background-image:linear-gradient(rgba(249,115,22,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.06)_1px,transparent_1px)] [background-size:10px_10px] opacity-10" />
 
           {/* Global scanline */}
           <motion.div
@@ -92,7 +77,7 @@ export default function InterfaceTransition({
           >
             {/* Ambient core glow */}
             <motion.div
-              className="absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500/10 blur-3xl"
+              className="absolute top-1/2 left-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500/10 blur-3xl"
               animate={{
                 scale: [0.8, 1.2, 0.9, 1.5],
                 opacity: [0.3, 0.7, 0.3, 0],
@@ -107,7 +92,7 @@ export default function InterfaceTransition({
             {radialLines.map((angle, index) => (
               <motion.div
                 key={angle}
-                className="absolute left-1/2 top-1/2 h-px w-[46%] origin-left"
+                className="absolute top-1/2 left-1/2 h-px w-[46%] origin-left"
                 style={{
                   rotate: angle,
                 }}
@@ -127,9 +112,7 @@ export default function InterfaceTransition({
               >
                 <div
                   className={`h-full w-full ${
-                    index % 3 === 0
-                      ? 'bg-orange-500/40'
-                      : 'bg-blue-400/20'
+                    index % 3 === 0 ? 'bg-orange-500/40' : 'bg-blue-400/20'
                   }`}
                 />
               </motion.div>
@@ -137,7 +120,7 @@ export default function InterfaceTransition({
 
             {/* Outer reactor ring */}
             <motion.div
-              className="absolute left-1/2 top-1/2 h-[92%] w-[92%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-blue-400/10"
+              className="absolute top-1/2 left-1/2 h-[92%] w-[92%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-blue-400/10"
               animate={{
                 rotate: -360,
                 opacity: [0, 1, 0],
@@ -156,7 +139,7 @@ export default function InterfaceTransition({
 
             {/* Outer segmented ring */}
             <motion.div
-              className="absolute left-1/2 top-1/2 h-[82%] w-[82%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-orange-500/30"
+              className="absolute top-1/2 left-1/2 h-[82%] w-[82%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-orange-500/30"
               animate={{
                 rotate: 360,
                 scale: [0.85, 1, 1.05],
@@ -179,7 +162,7 @@ export default function InterfaceTransition({
 
             {/* Technical arc */}
             <motion.div
-              className="absolute left-1/2 top-1/2 h-[76%] w-[76%] -translate-x-1/2 -translate-y-1/2 rounded-full border-[2px] border-transparent border-l-orange-500/70 border-t-orange-500/20"
+              className="absolute top-1/2 left-1/2 h-[76%] w-[76%] -translate-x-1/2 -translate-y-1/2 rounded-full border-[2px] border-transparent border-t-orange-500/20 border-l-orange-500/70"
               animate={{
                 rotate: 360,
                 opacity: [0, 1, 0],
@@ -197,7 +180,7 @@ export default function InterfaceTransition({
 
             {/* Blue counter arc */}
             <motion.div
-              className="absolute left-1/2 top-1/2 h-[68%] w-[68%] -translate-x-1/2 -translate-y-1/2 rounded-full border-[2px] border-transparent border-r-blue-400/60 border-b-blue-400/20"
+              className="absolute top-1/2 left-1/2 h-[68%] w-[68%] -translate-x-1/2 -translate-y-1/2 rounded-full border-[2px] border-transparent border-r-blue-400/60 border-b-blue-400/20"
               animate={{
                 rotate: -360,
                 opacity: [0, 1, 0],
@@ -215,7 +198,7 @@ export default function InterfaceTransition({
 
             {/* Inner ring */}
             <motion.div
-              className="absolute left-1/2 top-1/2 h-[57%] w-[57%] -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-dashed border-orange-500/30"
+              className="absolute top-1/2 left-1/2 h-[57%] w-[57%] -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-dashed border-orange-500/30"
               animate={{
                 rotate: 360,
                 scale: [0.7, 1, 1.15],
@@ -242,7 +225,7 @@ export default function InterfaceTransition({
               return (
                 <motion.div
                   key={index}
-                  className="absolute left-1/2 top-1/2 h-1 w-3 origin-left"
+                  className="absolute top-1/2 left-1/2 h-1 w-3 origin-left"
                   style={{
                     rotate: angle,
                     transformOrigin: '0 50%',
@@ -260,9 +243,7 @@ export default function InterfaceTransition({
                 >
                   <div
                     className={`h-px w-full ${
-                      index % 4 === 0
-                        ? 'bg-orange-500'
-                        : 'bg-blue-400/50'
+                      index % 4 === 0 ? 'bg-orange-500' : 'bg-blue-400/50'
                     }`}
                   />
                 </motion.div>
@@ -273,7 +254,7 @@ export default function InterfaceTransition({
             {[0, 90, 180, 270].map((angle, index) => (
               <motion.div
                 key={angle}
-                className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500 shadow-[0_0_12px_rgba(249,115,22,0.9)]"
+                className="absolute top-1/2 left-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500 shadow-[0_0_12px_rgba(249,115,22,0.9)]"
                 animate={{
                   rotate: 360,
                   opacity: [0, 1, 0],
@@ -292,9 +273,9 @@ export default function InterfaceTransition({
             ))}
 
             {/* Crosshair */}
-            <div className="absolute left-1/2 top-1/2 h-[44%] w-[44%] -translate-x-1/2 -translate-y-1/2">
+            <div className="absolute top-1/2 left-1/2 h-[44%] w-[44%] -translate-x-1/2 -translate-y-1/2">
               <motion.div
-                className="absolute left-1/2 top-0 h-7 w-px -translate-x-1/2 bg-orange-500/50"
+                className="absolute top-0 left-1/2 h-7 w-px -translate-x-1/2 bg-orange-500/50"
                 animate={{
                   scaleY: [0, 1, 0],
                 }}
@@ -315,7 +296,7 @@ export default function InterfaceTransition({
               />
 
               <motion.div
-                className="absolute left-0 top-1/2 h-px w-7 -translate-y-1/2 bg-orange-500/50"
+                className="absolute top-1/2 left-0 h-px w-7 -translate-y-1/2 bg-orange-500/50"
                 animate={{
                   scaleX: [0, 1, 0],
                 }}
@@ -326,7 +307,7 @@ export default function InterfaceTransition({
               />
 
               <motion.div
-                className="absolute right-0 top-1/2 h-px w-7 -translate-y-1/2 bg-orange-500/50"
+                className="absolute top-1/2 right-0 h-px w-7 -translate-y-1/2 bg-orange-500/50"
                 animate={{
                   scaleX: [0, 1, 0],
                 }}
@@ -339,7 +320,7 @@ export default function InterfaceTransition({
 
             {/* Central reactor */}
             <motion.div
-              className="absolute left-1/2 top-1/2 flex h-32 w-32 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-orange-500/60 bg-black/80 backdrop-blur-sm"
+              className="absolute top-1/2 left-1/2 flex h-32 w-32 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-orange-500/60 bg-black/80 backdrop-blur-sm"
               animate={{
                 scale: [0.8, 1, 1.08, 1.25],
                 boxShadow: [
@@ -407,7 +388,7 @@ export default function InterfaceTransition({
 
             {/* Scanner sweep */}
             <motion.div
-              className="pointer-events-none absolute left-1/2 top-1/2 h-[92%] w-px origin-bottom bg-gradient-to-t from-orange-500/80 via-orange-500/20 to-transparent"
+              className="pointer-events-none absolute top-1/2 left-1/2 h-[92%] w-px origin-bottom bg-gradient-to-t from-orange-500/80 via-orange-500/20 to-transparent"
               initial={{
                 rotate: 0,
               }}
@@ -439,11 +420,7 @@ export default function InterfaceTransition({
                 <div>{item.label}</div>
 
                 <div
-                  className={`mt-1 ${
-                    index % 2 === 0
-                      ? 'text-orange-500/70'
-                      : 'text-blue-400/70'
-                  }`}
+                  className={`mt-1 ${index % 2 === 0 ? 'text-orange-500/70' : 'text-blue-400/70'}`}
                 >
                   {item.value}
                 </div>
@@ -452,7 +429,7 @@ export default function InterfaceTransition({
 
             {/* System labels */}
             <motion.div
-              className="absolute left-1/2 top-[3%] -translate-x-1/2 text-[8px] tracking-[0.4em] text-gray-600"
+              className="absolute top-[3%] left-1/2 -translate-x-1/2 text-[8px] tracking-[0.4em] text-gray-600"
               animate={{
                 opacity: [0, 1, 0],
               }}
@@ -477,10 +454,10 @@ export default function InterfaceTransition({
             </motion.div>
 
             {/* Corner brackets */}
-            <div className="absolute left-2 top-2 h-8 w-8 border-l border-t border-orange-500/40" />
-            <div className="absolute right-2 top-2 h-8 w-8 border-r border-t border-orange-500/40" />
+            <div className="absolute top-2 left-2 h-8 w-8 border-t border-l border-orange-500/40" />
+            <div className="absolute top-2 right-2 h-8 w-8 border-t border-r border-orange-500/40" />
             <div className="absolute bottom-2 left-2 h-8 w-8 border-b border-l border-orange-500/40" />
-            <div className="absolute bottom-2 right-2 h-8 w-8 border-b border-r border-orange-500/40" />
+            <div className="absolute right-2 bottom-2 h-8 w-8 border-r border-b border-orange-500/40" />
           </motion.div>
         </motion.div>
       )}
